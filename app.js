@@ -229,6 +229,13 @@ function startTimer(subject, minutes, slotName) {
 
       document.getElementById(subject + "-status").innerHTML =
         `✅ Completed (${studiedHours.toFixed(1)}h)`;
+          const studiedTopic =
+    syllabus[subject].find(t => t.remaining > 0)?.topic
+    || syllabus[subject][0].topic;
+
+  const content = generateContentIdea(subject, studiedTopic);
+  saveContentIdea(content);
+
 
       logStudy(subject, studiedHours);
       localStorage.setItem("syllabus", JSON.stringify(syllabus));
@@ -313,3 +320,35 @@ function logStudy(subject, hours) {
 
   localStorage.setItem("studyStats", JSON.stringify(stats));
 }
+
+function renderContentBoard() {
+  const board = document.getElementById("content-board");
+  if (!board) return;
+
+  const ideas =
+    JSON.parse(localStorage.getItem("contentIdeas") || "[]");
+
+  if (ideas.length === 0) {
+    board.innerHTML = "<p>No content ideas yet 🎥</p>";
+    return;
+  }
+
+  let html = "<h3>🎬 Content Ideas from Your Study</h3><ul>";
+
+  ideas.slice(-5).reverse().forEach((c, i) => {
+    html += `
+      <li style="margin-bottom:10px">
+        <strong>${c.topic}</strong> (${c.subject.toUpperCase()})<br/>
+        👉 ${c.idea}<br/>
+        <small>${c.createdAt}</small>
+      </li>
+    `;
+  });
+
+  html += "</ul>";
+  board.innerHTML = html;
+}
+
+// render on load
+renderContentBoard();
+

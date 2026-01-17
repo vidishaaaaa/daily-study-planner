@@ -176,17 +176,15 @@ document.getElementById("streak").innerText =
   `🔥 Current Streak: ${streak} days`;
 
 
-/* =========================
-   TIMER LOGIC (CORRECT)
-========================= */
 function startTimer(subject, minutes, slotName) {
   slotStarted[slotName] = true;
 
   if (!timers[slotName]) {
     timers[slotName] = {
-      remaining: minutes * 60,
-      total: minutes * 60,
+      total: minutes * 60,      // seconds
+      remaining: minutes * 60,  // seconds
       running: false,
+      startedAt: null,
       interval: null
     };
   }
@@ -194,27 +192,30 @@ function startTimer(subject, minutes, slotName) {
   if (timers[slotName].running) return;
 
   timers[slotName].running = true;
+  timers[slotName].startedAt = Date.now();
 
   timers[slotName].interval = setInterval(() => {
-    timers[slotName].remaining--;
+    if (!timers[slotName].running) return;
 
-    const timeLeft = timers[slotName].remaining;
+    // ✅ real elapsed time (tab-safe)
+    const elapsedSeconds = Math.floor(
+      (Date.now() - timers[slotName].startedAt) / 1000
+    );
 
-    // progress bar
-    const progress =
-      ((timers[slotName].total - timeLeft) / timers[slotName].total) * 100;
-
-    const bar = document.getElementById(slotName + "-progress");
-    if (bar) bar.style.width = progress + "%";
+    const timeLeft =
+      timers[slotName].remaining - elapsedSeconds;
 
     if (timeLeft <= 0) {
       clearInterval(timers[slotName].interval);
       timers[slotName].running = false;
       timers[slotName].remaining = 0;
 
-      const studiedSeconds =
-        timers[slotName].total;
+      // full progress bar
+      const bar = document.getElementById(slotName + "-progress");
+      if (bar) bar.style.width = "100%";
 
+      // studied time
+      const studiedSeconds = timers[slotName].total;
       const studiedHours = studiedSeconds / 3600;
 
       for (let t of syllabus[subject]) {
@@ -229,13 +230,6 @@ function startTimer(subject, minutes, slotName) {
 
       document.getElementById(subject + "-status").innerHTML =
         `✅ Completed (${studiedHours.toFixed(1)}h)`;
-          const studiedTopic =
-    syllabus[subject].find(t => t.remaining > 0)?.topic
-    || syllabus[subject][0].topic;
-
-  const content = generateContentIdea(subject, studiedTopic);
-  saveContentIdea(content);
-
 
       logStudy(subject, studiedHours);
       localStorage.setItem("syllabus", JSON.stringify(syllabus));
@@ -244,16 +238,35 @@ function startTimer(subject, minutes, slotName) {
       return;
     }
 
+    // update UI
     document.getElementById(slotName + "-timer").innerText =
       formatTime(timeLeft);
+
+    const progress =
+      ((timers[slotName].total - timeLeft) /
+        timers[slotName].total) * 100;
+
+    const bar = document.getElementById(slotName + "-progress");
+    if (bar) bar.style.width = progress + "%";
 
   }, 1000);
 }
 
+
 function pauseTimer(slotName) {
   if (!timers[slotName] || !timers[slotName].running) return;
-  clearInterval(timers[slotName].interval);
+
+  // calculate elapsed before pausing
+  const elapsedSeconds = Math.floor(
+    (Date.now() - timers[slotName].startedAt) / 1000
+  );
+
+  timers[slotName].remaining -= elapsedSeconds;
+  if (timers[slotName].remaining < 0)
+    timers[slotName].remaining = 0;
+
   timers[slotName].running = false;
+  clearInterval(timers[slotName].interval);
 }
 
 

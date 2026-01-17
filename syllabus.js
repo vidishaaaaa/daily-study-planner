@@ -16,7 +16,7 @@ const syllabus = {
   ],
 
   reasoning: [
-   // { topic: "Syllogism", remaining: 2 },
+    { topic: "Syllogism", remaining: 2 },
     { topic: "Statement & Conclusion", remaining: 1 },
     { topic: "Statement & Assumption", remaining: 1 },
     { topic: "Assertion & Reason", remaining: 1 },
@@ -52,7 +52,7 @@ const syllabus = {
   ],
 
   science: [
-   // { topic: "Environment", remaining: 2 },
+    { topic: "Environment", remaining: 2 },
     { topic: "Nutrition", remaining: 1 },
     { topic: "Vitamin & Mineral", remaining: 2 },
     { topic: "Human Digestive System", remaining: 3 },

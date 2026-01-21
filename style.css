@@ -114,6 +114,34 @@ button {
   margin-top: 6px;
   overflow: hidden;
 }
+#backBtn {
+  margin: 10px;
+  padding: 8px 14px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  background: #4caf50;
+  color: white;
+}
+
+
+#topic-panel {
+  margin-top: 20px;
+  padding: 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+#topic-panel ul {
+  padding-left: 20px;
+}
+
+#topic-panel li {
+  margin-bottom: 8px;
+}
+
 
 .slot-progress-bar {
   height: 100%;
@@ -121,3 +149,55 @@ button {
   background: linear-gradient(90deg, #4f46e5, #22c55e);
   transition: width 0.3s ease;
 }
+
+/* Hamburger */
+#hamburger {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 26px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Sidebar */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 250px;
+  height: 100%;
+  background: #1e293b;
+  color: white;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+#sidebar.open {
+  left: 0;
+}
+
+#sidebar h2 {
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+#subject-list {
+  list-style: none;
+  padding: 0;
+}
+
+#subject-list li {
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #334155;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+#subject-list li:hover {
+  background: #475569;
+}
+

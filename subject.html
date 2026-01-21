@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Subject Topics</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button id="backBtn" onclick="goBack()">⬅ Back</button>
+<h1 id="subject-title"></h1>
+<ul id="topic-list"></ul>
+
+<script src="syllabus.js"></script>
+<script>
+   function goBack() {
+    window.location.href = "index.html";   // or your main page name
+  }
+  const params = new URLSearchParams(window.location.search);
+  const subject = params.get("name");
+
+  if (!subject || !syllabus[subject]) {
+    document.body.innerHTML = "<h2>Invalid Subject</h2>";
+  } else {
+    document.getElementById("subject-title").innerText =
+      subject.toUpperCase() + " Topics";
+
+    const list = document.getElementById("topic-list");
+
+    syllabus[subject].forEach(t => {
+      const li = document.createElement("li");
+      li.innerText = `${t.topic} — ${t.remaining} hrs`;
+      list.appendChild(li);
+    });
+  }
+</script>
+
+
+</body>
+</html>

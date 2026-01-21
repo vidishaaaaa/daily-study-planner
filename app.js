@@ -92,19 +92,27 @@ function formatTime(sec) {
 ========================= */
 function getTopicsForSlot(subject, totalMinutes) {
   const topics = [];
-  let remainingMinutes = totalMinutes;
+  let remainingSeconds = totalMinutes * 60;
 
   for (let t of syllabus[subject]) {
     if (t.remaining <= 0) continue;
 
-    const used = Math.min(t.remaining * 60, remainingMinutes);
-    topics.push({ topic: t.topic, minutes: used });
-    remainingMinutes -= used;
+    const topicSeconds = t.remaining * 3600; // hours → seconds
+    const usedSeconds = Math.min(topicSeconds, remainingSeconds);
 
-    if (remainingMinutes <= 0) break;
+    topics.push({
+      topic: t.topic,
+      minutes: Math.floor(usedSeconds / 60)
+    });
+
+    remainingSeconds -= usedSeconds;
+
+    if (remainingSeconds <= 0) break;
   }
+
   return topics;
 }
+
 
 
 /* =========================
